@@ -20,6 +20,7 @@ const server = http.createServer((req, res) => {
         if (json.event.reaction == "vasco") {
           var user = json.event.item_user;
           console.log(`User ${user} has received vasco reaction!`);
+          res.end("Got it, thanks!");
         }
       }
     } else {
