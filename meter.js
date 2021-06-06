@@ -17,7 +17,10 @@ const server = http.createServer((req, res) => {
         res.setHeader('Content-Type', 'text/plain');
         res.end(json.challenge);
       } else {
-        console.log(body); 
+        if (json.event.reaction == "vasco") {
+          var user = json.event.item_user;
+          console.log(`User ${user} has received vasco reaction!`);
+        }
       }
     } else {
       res.end();
