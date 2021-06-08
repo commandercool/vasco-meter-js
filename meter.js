@@ -15,21 +15,30 @@ const hostname = "0.0.0.0";
 const port = 8080;
 
 const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+
   let body = "";
   req.on("data", (chunk) => {
     body += chunk;
   });
+
   req.on("end", () => {
     if (body != "") {
       const json = JSON.parse(body);
-      res.statusCode = 200;
+      // we can receive challenge if this is
+      // the first time we are using new url
+      // to register our app in slack
       if (json.challenge) {
         res.setHeader("Content-Type", "text/plain");
         res.end(json.challenge);
       } else {
+        // real event processing goes here
         if (json.event.reaction == "vasco") {
           var user = json.event.item_user;
           options.path = "/api/users.info?user=" + user;
+
+          // fetch user info of the poster of the item that
+          // has received a new reaction
           const req = https.request(options, (res) => {
 
             let userData = "";
@@ -43,13 +52,15 @@ const server = http.createServer((req, res) => {
                 console.log(`Error from slack: ${userData}`);
               } else {
                 var username = userJson.user.profile.real_name_normalized;
-                console.log(`User ${username} has received vasco reaction!`);
+                console.log(`User ${username} has received vasco reaction - reaction event: ${json.type}!`);
               }
             });
           });
+
           req.on("error", (error) => {
             console.error(error);
           });
+
           req.end();
 
           res.end("Got it, thanks!");
