@@ -68,7 +68,7 @@ const server = http.createServer((req, res) => {
                 console.log(`Error from slack: ${userData}`);
               } else {
                 var username = userJson.user.profile.real_name_normalized;
-                updateStats(userName, json.event.type);
+                updateStats(username, json.event.type);
                 console.log(`User ${username} has received vasco reaction - reaction event: ${json.event.type}!`);
               }
             });
@@ -96,8 +96,8 @@ server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-function updateStats(userName, event) {
-  var userStat = vascos.findOne({"name": userName});
+function updateStats(username, event) {
+  var userStat = vascos.findOne({"name": username});
   console.log(`User stats: ${userStat}`);
   if (event == 'reaction_removed') {
     
