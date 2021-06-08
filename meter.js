@@ -97,7 +97,10 @@ server.listen(port, hostname, () => {
 });
 
 function updateStats(username, event) {
-  var userStat = vascos.findOne({"name": username}, function(err, result) {
-    console.log(`User stats: ${userStat}`);
+  vascos.findOne({"name": username}, function(err, result) {
+    if (!result) {
+      result = {"name": username, "count": 0};
+    }
+    console.log(`User stats: ${result}`);
   });
 }
