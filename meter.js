@@ -37,8 +37,9 @@ const server = http.createServer((req, res) => {
             res.on("data", (d) => {
               userData += d;
             });
-            console.log(`Data from slack: ${userData}`)
+            
             res.on("end", () => {
+              console.log(`Data from slack: ${userData}`)
               const userJson = JSON.parse(body);
               var username = userJson.user.real_name_normalized;
               console.log(`User ${username} has received vasco reaction!`);
