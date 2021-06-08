@@ -68,8 +68,8 @@ const server = http.createServer((req, res) => {
                 console.log(`Error from slack: ${userData}`);
               } else {
                 var username = userJson.user.profile.real_name_normalized;
-                updateStats(username, json.event.type);
                 console.log(`User ${username} has received vasco reaction - reaction event: ${json.event.type}!`);
+                updateStats(username, json.event.type);
               }
             });
           });
@@ -102,5 +102,11 @@ function updateStats(username, event) {
       result = {"name": username, "count": 0};
     }
     console.log(`User stats: ${JSON.stringify(result)}`);
+    if (event == 'reaction_removed' && result.count > 0) {
+      result.count -= 1;
+    } else {
+      result.contr += 1;
+    }
+    vascos.updateOne(result, {"upsert" : true});
   });
 }
