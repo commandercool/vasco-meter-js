@@ -38,9 +38,8 @@ const server = http.createServer((req, res) => {
     body += chunk;
   });
 
-  console.log(`Incoming event: ${body}`)
-
   req.on("end", () => {
+    console.log(`Incoming event: ${body}`)
     if (body != "") {
       const json = JSON.parse(body);
       // we can receive challenge if this is
