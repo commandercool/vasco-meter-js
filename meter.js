@@ -1,24 +1,49 @@
-const http = require('http');
+const http = require("http");
+const https = require("https");
 
-const hostname = '127.0.0.1';
+const options = {
+  hostname: "slack.com",
+  port: 443,
+  path: "/api/users.info",
+  method: "GET",
+  headers: {
+    Authorization: "Bearer " + process.env.SLACK_TOKEN,
+  },
+};
+
+const hostname = "0.0.0.0";
 const port = 8080;
 
 const server = http.createServer((req, res) => {
-  let body = '';
-  req.on('data', (chunk) => {
+  let body = "";
+  req.on("data", (chunk) => {
     body += chunk;
   });
-  req.on('end', () => {
-    if(body != '') {
+  req.on("end", () => {
+    if (body != "") {
       console.log(body);
       const json = JSON.parse(body);
       res.statusCode = 200;
-      if (json.challenge){
-        res.setHeader('Content-Type', 'text/plain');
+      if (json.challenge) {
+        res.setHeader("Content-Type", "text/plain");
         res.end(json.challenge);
       } else {
         if (json.event.reaction == "vasco") {
           var user = json.event.item_user;
+          options.path = options.path + '?user' + user;
+          const req = https.request(options, (res) => {
+            console.log(`statusCode from slack api: ${res.statusCode}`);
+
+            res.on("data", (d) => {
+              process.stdout.write(d);
+            });
+          });
+
+          req.on("error", (error) => {
+            console.error(error);
+          });
+          req.end();
+
           console.log(`User ${user} has received vasco reaction!`);
           res.end("Got it, thanks!");
         }
