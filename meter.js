@@ -107,6 +107,6 @@ function updateStats(username, event) {
     } else {
       result.contr += 1;
     }
-    vascos.updateOne(result, {"upsert" : true});
+    vascos.updateOne({"name": username}, result, {"upsert" : true});
   });
 }
