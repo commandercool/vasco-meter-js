@@ -52,7 +52,7 @@ const server = http.createServer((req, res) => {
                 console.log(`Error from slack: ${userData}`);
               } else {
                 var username = userJson.user.profile.real_name_normalized;
-                console.log(`User ${username} has received vasco reaction - reaction event: ${json.type}!`);
+                console.log(`User ${username} has received vasco reaction - reaction event: ${json.event.type}!`);
               }
             });
           });
