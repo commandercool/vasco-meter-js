@@ -38,6 +38,8 @@ const server = http.createServer((req, res) => {
     body += chunk;
   });
 
+  console.log(`Incoming event: ${body}`)
+
   req.on("end", () => {
     if (body != "") {
       const json = JSON.parse(body);
@@ -101,12 +103,12 @@ function updateStats(username, event) {
     if (!result) {
       result = {"name": username, "count": 0};
     }
-    console.log(`User stats: ${JSON.stringify(result)}`);
     if (event == 'reaction_removed' && result.count > 0) {
       result.count -= 1;
     } else {
       result.count += 1;
     }
+    console.log(`Updating user stats for: ${JSON.stringify(result)}`);
     vascos.updateOne({"name": username}, {$set: result}, {"upsert" : true});
   });
 }
