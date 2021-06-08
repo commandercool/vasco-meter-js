@@ -1,6 +1,6 @@
 const http = require("http");
 const https = require("https");
-const MongoClient = require("mongodb");
+const MongoClient = require("mongodb").MongoClient;
 
 const uri =
   "mongodb://localhost:27017?retryWrites=true&writeConcern=majority";
