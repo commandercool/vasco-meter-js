@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
       } else {
         if (json.event.reaction == "vasco") {
           var user = json.event.item_user;
-          options.path = options.path + '?user' + user;
+          options.path = options.path + '?user=' + user;
           const req = https.request(options, (res) => {
             console.log(`statusCode from slack api: ${res.statusCode}`);
 
