@@ -41,17 +41,15 @@ const server = http.createServer((req, res) => {
             res.on("end", () => {
               console.log(`Data from slack: ${userData}`)
               const userJson = JSON.parse(body);
-              var username = userJson.user.real_name_normalized;
+              var username = userJson.user.profile.real_name_normalized;
               console.log(`User ${username} has received vasco reaction!`);
             });
           });
           req.on("error", (error) => {
             console.error(error);
           });
-
           req.end();
-
-          console.log(`User ${user} has received vasco reaction!`);
+          
           res.end("Got it, thanks!");
         }
       }
