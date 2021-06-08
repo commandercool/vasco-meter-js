@@ -105,7 +105,7 @@ function updateStats(username, event) {
     if (event == 'reaction_removed' && result.count > 0) {
       result.count -= 1;
     } else {
-      result.contr += 1;
+      result.count += 1;
     }
     vascos.updateOne({"name": username}, {$set: result}, {"upsert" : true});
   });
