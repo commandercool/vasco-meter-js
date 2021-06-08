@@ -13,7 +13,7 @@ const mongoCli = new MongoClient(uri, {
 });
 
 function connectMongo() {
-  await client.connect();
+  client.connect();
   const database = client.db('meter');
   vascos = database.collection('vascos');
 }
