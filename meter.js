@@ -101,6 +101,6 @@ function updateStats(username, event) {
     if (!result) {
       result = {"name": username, "count": 0};
     }
-    console.log(`User stats: ${result}`);
+    console.log(`User stats: ${JSON.stringify(result)}`);
   });
 }
