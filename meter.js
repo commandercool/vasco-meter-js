@@ -1,5 +1,22 @@
 const http = require("http");
 const https = require("https");
+const MongoClient = require("mongodb");
+
+const uri =
+  "mongodb://localhost:27017?retryWrites=true&writeConcern=majority";
+
+var vascos;
+
+const mongoCli = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+function connectMongo() {
+  await client.connect();
+  const database = client.db('meter');
+  vascos = database.collection('vascos');
+}
 
 const options = {
   hostname: "slack.com",
@@ -71,6 +88,9 @@ const server = http.createServer((req, res) => {
     }
   });
 });
+
+// Startup
+connectMongo();
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
