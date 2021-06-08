@@ -21,7 +21,6 @@ const server = http.createServer((req, res) => {
   });
   req.on("end", () => {
     if (body != "") {
-      console.log(body);
       const json = JSON.parse(body);
       res.statusCode = 200;
       if (json.challenge) {
