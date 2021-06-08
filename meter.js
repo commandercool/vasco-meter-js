@@ -97,11 +97,7 @@ server.listen(port, hostname, () => {
 });
 
 function updateStats(username, event) {
-  var userStat = vascos.findOne({"name": username});
-  console.log(`User stats: ${userStat}`);
-  if (event == 'reaction_removed') {
-    
-  } else {
-
-  }
+  var userStat = vascos.findOne({"name": username}, function(err, result) {
+    console.log(`User stats: ${userStat}`);
+  });
 }
