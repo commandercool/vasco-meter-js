@@ -40,7 +40,7 @@ const server = http.createServer((req, res) => {
             
             res.on("end", () => {
               console.log(`Data from slack: ${userData}`)
-              const userJson = JSON.parse(body);
+              const userJson = JSON.parse(userData);
               var username = userJson.user.profile.real_name_normalized;
               console.log(`User ${username} has received vasco reaction!`);
             });
@@ -49,7 +49,7 @@ const server = http.createServer((req, res) => {
             console.error(error);
           });
           req.end();
-          
+
           res.end("Got it, thanks!");
         }
       }
