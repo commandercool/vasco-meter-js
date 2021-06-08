@@ -30,19 +30,22 @@ const server = http.createServer((req, res) => {
       } else {
         if (json.event.reaction == "vasco") {
           var user = json.event.item_user;
-          options.path = options.path + '?user=' + user;
+          options.path = options.path + "?user=" + user;
           const req = https.request(options, (res) => {
-            console.log(`statusCode from slack api: ${res.statusCode}`);
-            let userData = "";  
+
+            let userData = "";
             res.on("data", (d) => {
               userData += d;
             });
-            
+
             res.on("end", () => {
-              console.log(`Data from slack: ${userData}`)
               const userJson = JSON.parse(userData);
-              var username = userJson.user.profile.real_name_normalized;
-              console.log(`User ${username} has received vasco reaction!`);
+              if (userJson.error) {
+                console.log(`Error from slack: ${userData}`);
+              } else {
+                var username = userJson.user.profile.real_name_normalized;
+                console.log(`User ${username} has received vasco reaction!`);
+              }
             });
           });
           req.on("error", (error) => {
