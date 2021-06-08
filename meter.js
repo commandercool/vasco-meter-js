@@ -33,15 +33,20 @@ const server = http.createServer((req, res) => {
           options.path = options.path + '?user=' + user;
           const req = https.request(options, (res) => {
             console.log(`statusCode from slack api: ${res.statusCode}`);
-
+            let userData = "";  
             res.on("data", (d) => {
-              process.stdout.write(d);
+              userData += d;
+            });
+            res.on("end", () => {
+              const userJson = JSON.parse(body);
+              var username = userJson.user.real_name_normalized;
+              console.log(`User ${username} has received vasco reaction!`);
             });
           });
-
           req.on("error", (error) => {
             console.error(error);
           });
+
           req.end();
 
           console.log(`User ${user} has received vasco reaction!`);
