@@ -14,8 +14,7 @@ const mongoCli = new MongoClient(uri, {
 
 function connectMongo() {
   mongoCli.connect();
-  const database = mongoCli.db('meter');
-  vascos = database.collection('vascos');
+  vascos = mongoCli.db('meter').collection('vascos');
 }
 
 const options = {
@@ -69,6 +68,7 @@ const server = http.createServer((req, res) => {
                 console.log(`Error from slack: ${userData}`);
               } else {
                 var username = userJson.user.profile.real_name_normalized;
+                updateStats(userName, json.event.type);
                 console.log(`User ${username} has received vasco reaction - reaction event: ${json.event.type}!`);
               }
             });
@@ -95,3 +95,13 @@ connectMongo();
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+function updateStats(userName, event) {
+  var userStat = vascos.findOne({"name": userName});
+  console.log(`User stats: ${userStat}`);
+  if (event == 'reaction_removed') {
+    
+  } else {
+
+  }
+}
