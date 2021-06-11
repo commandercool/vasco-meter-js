@@ -39,9 +39,15 @@ const server = http.createServer((req, res) => {
   });
 
   req.on("end", () => {
-    console.log(`Incoming event: ${body}`)
     if (body != "") {
-      const json = JSON.parse(body);
+      console.log(`Incoming event: ${body}`)
+      let json;
+      try {
+        json = JSON.parse(body);
+      } catch(e) {
+        console.log("Error parsing incoming event");
+        return;
+      }
       // we can receive challenge if this is
       // the first time we are using new url
       // to register our app in slack
@@ -51,7 +57,7 @@ const server = http.createServer((req, res) => {
       } else {
         // real event processing goes here
         if (json.event.reaction == "vasco") {
-          var user = json.event.item_user;
+          let user = json.event.item_user;
           options.path = "/api/users.info?user=" + user;
 
           // fetch user info of the poster of the item that
@@ -64,11 +70,16 @@ const server = http.createServer((req, res) => {
             });
 
             res.on("end", () => {
-              const userJson = JSON.parse(userData);
+              let userJson
+              try {
+                userJson = JSON.parse(userData);
+              } catch (e) {
+                console.log(`Error parsing user data ${userData}`);
+              }
               if (userJson.error) {
                 console.log(`Error from slack: ${userData}`);
               } else {
-                var username = userJson.user.profile.real_name_normalized;
+                let username = userJson.user.profile.real_name_normalized;
                 console.log(`User ${username} has received vasco reaction - reaction event: ${json.event.type}!`);
                 updateStats(username, json.event.type);
               }
