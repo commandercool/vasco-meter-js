@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
 
   req.on("end", () => {
     console.log(req.url);
-    if (req.method == "POST" && body != "") {
+    if (req.url == "/" && body != "") {
       console.log(`Incoming event: ${body}`);
       let json;
       try {
@@ -99,7 +99,7 @@ const server = http.createServer((req, res) => {
           res.end("Got it, thanks!");
         }
       }
-    } else {
+    } else if (req.url == "/stats") {
       vascos
         .find()
         .toArray()
@@ -108,6 +108,8 @@ const server = http.createServer((req, res) => {
           console.log("Current stats are: ", strStats);
           res.end(strStats);
         });
+    } else {
+      res.end();
     }
   });
 });
