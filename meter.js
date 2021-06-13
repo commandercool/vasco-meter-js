@@ -103,8 +103,9 @@ const server = http.createServer((req, res) => {
         .find()
         .toArray()
         .then((stats) => {
-          console.log("Current stats are: ", stats);
-          res.end(JSON.stringify(stats));
+          let strStats = JSON.stringify(stats);
+          console.log("Current stats are: ", strStats);
+          res.end(JSON.stringify(strStats));
         });
     }
   });
