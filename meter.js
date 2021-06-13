@@ -38,7 +38,6 @@ const server = http.createServer((req, res) => {
   });
 
   req.on("end", () => {
-    console.log(req.url);
     if (req.url == "/" && body != "") {
       console.log(`Incoming event: ${body}`);
       let json;
@@ -105,6 +104,7 @@ const server = http.createServer((req, res) => {
         .sort({"count": -1})
         .toArray()
         .then((stats) => {
+          console.log("Current stats are: ", JSON.stringify(stats));
           var blocks = [];
           let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text": ":trophy: *Current stats are:*"}};
           blocks.push(titleBlock);
@@ -117,10 +117,8 @@ const server = http.createServer((req, res) => {
             blocks.push(block);
           });
           let mrkdwn = {"blocks": blocks};
-          let strStats = JSON.stringify(mrkdwn);
-          console.log("Current stats are: ", strStats);
           res.setHeader("Content-Type", "application/json");
-          res.end(strStats);
+          res.end(mrkdwn);
         });
     } else {
       res.end();
