@@ -39,13 +39,14 @@ const server = http.createServer((req, res) => {
   });
 
   req.on("end", () => {
-    if (body != "") {
+    if (req.method == "POST" && body != "") {
       console.log(`Incoming event: ${body}`)
       let json;
       try {
         json = JSON.parse(body);
       } catch(e) {
         console.log("Error parsing incoming event");
+        res.end();
         return;
       }
       // we can receive challenge if this is
@@ -75,6 +76,8 @@ const server = http.createServer((req, res) => {
                 userJson = JSON.parse(userData);
               } catch (e) {
                 console.log(`Error parsing user data ${userData}`);
+                res.end();
+                return;
               }
               if (userJson.error) {
                 console.log(`Error from slack: ${userData}`);
@@ -96,7 +99,7 @@ const server = http.createServer((req, res) => {
         }
       }
     } else {
-      res.end();
+      res.end(vascos.find());
     }
   });
 });
