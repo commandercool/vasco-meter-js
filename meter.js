@@ -106,7 +106,7 @@ const server = http.createServer((req, res) => {
         .then((stats) => {
           let blocks = [];
           stats.forEach(stat => {
-            let block;
+            let block = {};
             block.type = "section";
             block.text.type = "mrkdwn";
             block.text.text = `${stats.name}: ${stat.count} x :vasco:`;
