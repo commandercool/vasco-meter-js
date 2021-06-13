@@ -106,7 +106,7 @@ const server = http.createServer((req, res) => {
         .then((stats) => {
           let strStats = JSON.stringify(stats);
           console.log("Current stats are: ", strStats);
-          res.header("Content-Type", "application/json");
+          res.setHeader("Content-Type", "application/json");
           res.end(strStats);
         });
     } else {
