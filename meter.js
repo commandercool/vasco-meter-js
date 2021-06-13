@@ -105,6 +105,8 @@ const server = http.createServer((req, res) => {
         .toArray()
         .then((stats) => {
           var blocks = [];
+          let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text:": ":trophy: **Current stats are:**"}};
+          blocks.push(titleBlock);
           stats.forEach(stat => {
             let block = {};
             block.type = "section";
