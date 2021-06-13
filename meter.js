@@ -2,8 +2,7 @@ const http = require("http");
 const https = require("https");
 const MongoClient = require("mongodb").MongoClient;
 
-const uri =
-  "mongodb://localhost:27017?retryWrites=true&writeConcern=majority";
+const uri = "mongodb://localhost:27017?retryWrites=true&writeConcern=majority";
 
 var vascos;
 
@@ -14,7 +13,7 @@ const mongoCli = new MongoClient(uri, {
 
 function connectMongo() {
   mongoCli.connect();
-  vascos = mongoCli.db('meter').collection('vascos');
+  vascos = mongoCli.db("meter").collection("vascos");
 }
 
 const options = {
@@ -40,11 +39,11 @@ const server = http.createServer((req, res) => {
 
   req.on("end", () => {
     if (req.method == "POST" && body != "") {
-      console.log(`Incoming event: ${body}`)
+      console.log(`Incoming event: ${body}`);
       let json;
       try {
         json = JSON.parse(body);
-      } catch(e) {
+      } catch (e) {
         console.log("Error parsing incoming event");
         res.end();
         return;
@@ -64,14 +63,13 @@ const server = http.createServer((req, res) => {
           // fetch user info of the poster of the item that
           // has received a new reaction
           const req = https.request(options, (res) => {
-
             let userData = "";
             res.on("data", (d) => {
               userData += d;
             });
 
             res.on("end", () => {
-              let userJson
+              let userJson;
               try {
                 userJson = JSON.parse(userData);
               } catch (e) {
@@ -83,7 +81,9 @@ const server = http.createServer((req, res) => {
                 console.log(`Error from slack: ${userData}`);
               } else {
                 let username = userJson.user.profile.real_name_normalized;
-                console.log(`User ${username} has received vasco reaction - reaction event: ${json.event.type}!`);
+                console.log(
+                  `User ${username} has received vasco reaction - reaction event: ${json.event.type}!`
+                );
                 updateStats(username, json.event.type);
               }
             });
@@ -99,11 +99,13 @@ const server = http.createServer((req, res) => {
         }
       }
     } else {
-      res.end(vascos.find().toArray()
-        .then(stats => {
+      vascos
+        .find()
+        .toArray()
+        .then((stats) => {
           console.log("Current stats are: ", stats);
           res.end(stats);
-        }));
+        });
     }
   });
 });
@@ -116,16 +118,16 @@ server.listen(port, hostname, () => {
 });
 
 function updateStats(username, event) {
-  vascos.findOne({"name": username}, function(err, result) {
+  vascos.findOne({ name: username }, function (err, result) {
     if (!result) {
-      result = {"name": username, "count": 0};
+      result = { name: username, count: 0 };
     }
-    if (event == 'reaction_removed' && result.count > 0) {
+    if (event == "reaction_removed" && result.count > 0) {
       result.count -= 1;
     } else {
       result.count += 1;
     }
     console.log(`Updating user stats for: ${JSON.stringify(result)}`);
-    vascos.updateOne({"name": username}, {$set: result}, {"upsert" : true});
+    vascos.updateOne({ name: username }, { $set: result }, { upsert: true });
   });
 }
