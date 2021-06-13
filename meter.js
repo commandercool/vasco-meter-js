@@ -117,8 +117,9 @@ const server = http.createServer((req, res) => {
             blocks.push(block);
           });
           let mrkdwn = {"blocks": blocks};
+          let strStats = JSON.stringify(mrkdwn);
           res.setHeader("Content-Type", "application/json");
-          res.end(mrkdwn);
+          res.end(strStats);
         });
     } else {
       res.end();
