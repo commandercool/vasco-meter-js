@@ -104,8 +104,8 @@ const server = http.createServer((req, res) => {
         .toArray()
         .then((stats) => {
           console.log("Current stats are: ", stats);
-          res.end(stats);
         });
+        res.end();
     }
   });
 });
