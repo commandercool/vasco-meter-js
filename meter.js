@@ -38,6 +38,7 @@ const server = http.createServer((req, res) => {
   });
 
   req.on("end", () => {
+    console.log(req.url);
     if (req.method == "POST" && body != "") {
       console.log(`Incoming event: ${body}`);
       let json;
