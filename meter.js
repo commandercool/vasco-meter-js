@@ -102,10 +102,11 @@ const server = http.createServer((req, res) => {
     } else if (req.url == "/stats") {
       vascos
         .find()
+        .sort({"count": 2})
         .toArray()
         .then((stats) => {
           var blocks = [];
-          let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text:": ":trophy: **Current stats are:**"}};
+          let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text": ":trophy: **Current stats are:**"}};
           blocks.push(titleBlock);
           stats.forEach(stat => {
             let block = {};
