@@ -104,9 +104,9 @@ const server = http.createServer((req, res) => {
         .find()
         .toArray()
         .then((stats) => {
-          let blocks = [];
+          var blocks = new Array(stats.length);
           stats.forEach(stat => {
-            let block = new Object();
+            var block = new Object();
             block.type = "section";
             block.text.type = "mrkdwn";
             block.text.text = `${stats.name}: ${stat.count} x :vasco:`;
