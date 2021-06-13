@@ -105,7 +105,7 @@ const server = http.createServer((req, res) => {
         .then((stats) => {
           let strStats = JSON.stringify(stats);
           console.log("Current stats are: ", strStats);
-          res.end(JSON.stringify(strStats));
+          res.end(strStats);
         });
     }
   });
