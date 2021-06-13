@@ -104,13 +104,13 @@ const server = http.createServer((req, res) => {
         .find()
         .toArray()
         .then((stats) => {
-          var blocks = new Array(stats.length);
+          var blocks = [];
           stats.forEach(stat => {
             let block = {};
             block.type = "section";
             block.text = {};
             block.text.type = "mrkdwn";
-            block.text.text = `${stats.name}: ${stat.count} x :vasco:`;
+            block.text.text = `${stat.name}: ${stat.count} x :vasco:`;
             blocks.push(block);
           });
           let strStats = JSON.stringify(blocks);
