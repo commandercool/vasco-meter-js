@@ -99,7 +99,11 @@ const server = http.createServer((req, res) => {
         }
       }
     } else {
-      res.end(vascos.find());
+      res.end(vascos.find().toArray()
+        .then(stats => {
+          console.log("Current stats are: ", stats);
+          res.end(stats);
+        }));
     }
   });
 });
