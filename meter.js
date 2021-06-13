@@ -102,7 +102,7 @@ const server = http.createServer((req, res) => {
     } else if (req.url == "/stats") {
       vascos
         .find()
-        .sort({"count": 2})
+        .sort({"count": -1})
         .toArray()
         .then((stats) => {
           var blocks = [];
