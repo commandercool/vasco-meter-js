@@ -104,7 +104,15 @@ const server = http.createServer((req, res) => {
         .find()
         .toArray()
         .then((stats) => {
-          let strStats = JSON.stringify(stats);
+          let blocks = [];
+          stats.array.forEach(stat => {
+            let block;
+            block.type = "section";
+            block.text.type = "mrkdwn";
+            block.text.text = `${stats.name}: ${stat.count} x :vasco:`;
+            blocks.add(block);
+          });
+          let strStats = JSON.stringify(blocks);
           console.log("Current stats are: ", strStats);
           res.setHeader("Content-Type", "application/json");
           res.end(strStats);
