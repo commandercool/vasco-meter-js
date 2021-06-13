@@ -111,7 +111,7 @@ const server = http.createServer((req, res) => {
             block.text = {};
             block.text.type = "mrkdwn";
             block.text.text = `${stats.name}: ${stat.count} x :vasco:`;
-            blocks.add(block);
+            blocks.push(block);
           });
           let strStats = JSON.stringify(blocks);
           console.log("Current stats are: ", strStats);
