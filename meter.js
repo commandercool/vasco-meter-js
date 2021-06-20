@@ -60,6 +60,7 @@ const server = http.createServer((req, res) => {
         // comes from the bot
         if (json.token != process.env.BOT_TOKEN) {
           console.log("WARN: Forged request was discarded because if invalid token!");
+          res.end();
           return;
         }
         if (json.event.reaction == "vasco") {
@@ -67,7 +68,8 @@ const server = http.createServer((req, res) => {
           let reactionUser = json.event.user;
           // do not increment stats when user reaction to his own post
           if (user == reactionUser) {
-            console.log("Self reaction are not counted, discarding event");
+            console.log("Self reactions are not counted, discarding event");
+            res.end();
             return;
           }
 
