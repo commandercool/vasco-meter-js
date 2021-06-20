@@ -64,6 +64,13 @@ const server = http.createServer((req, res) => {
         }
         if (json.event.reaction == "vasco") {
           let user = json.event.item_user;
+          let reactionUser = json.user;
+          // do not increment stats when user reaction to his own post
+          if (user == reactionUser) {
+            console.log("Self reaction are not counted, discarding event");
+            return;
+          }
+
           options.path = "/api/users.info?user=" + user;
 
           // fetch user info of the poster of the item that
