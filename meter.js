@@ -1,3 +1,6 @@
+// Before running two env variables should be set:
+// SLACK_TOKEN - token that is used to call slack api
+// BOT_TOKEN - token provided by bot (used to check that requests were not forged)
 const http = require("http");
 const https = require("https");
 const MongoClient = require("mongodb").MongoClient;
