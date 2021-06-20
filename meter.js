@@ -56,6 +56,12 @@ const server = http.createServer((req, res) => {
         res.end(json.challenge);
       } else {
         // real event processing goes here
+        // check token first to make sure that event
+        // comes from the bot
+        if (json.token != process.env.BOT_TOKEN) {
+          console.log("WARN: Forged request was discarded because if invalid token!");
+          return;
+        }
         if (json.event.reaction == "vasco") {
           let user = json.event.item_user;
           options.path = "/api/users.info?user=" + user;
