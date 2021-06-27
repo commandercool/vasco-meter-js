@@ -117,28 +117,35 @@ const server = http.createServer((req, res) => {
         }
       }
     } else if (req.url == "/stats") {
-      vascos
-        .find()
-        .sort({"count": -1})
-        .toArray()
-        .then((stats) => {
-          console.log("Current stats are: ", JSON.stringify(stats));
-          var blocks = [];
-          let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text": ":trophy: *Current stats are:*"}};
-          blocks.push(titleBlock);
-          stats.forEach(stat => {
-            let block = {};
-            block.type = "section";
-            block.text = {};
-            block.text.type = "mrkdwn";
-            block.text.text = `${stat.name}: ${stat.count} x :vasco:`;
-            blocks.push(block);
+      let slashParam = Object.fromEntries(
+        body.split('&')
+         .map(s => s.split('='))
+         .map(pair => pair.map(decodeURIComponent)));
+      if (slashParam.text == "top") {
+        vascos
+          .find()
+          .sort({"count": -1})
+          .limit(4)
+          .toArray()
+          .then((stats) => {
+            console.log("Current stats are: ", JSON.stringify(stats));
+            var blocks = [];
+            let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text": ":trophy: *Current stats are:*"}};
+            blocks.push(titleBlock);
+            stats.forEach(stat => {
+              let block = {};
+              block.type = "section";
+              block.text = {};
+              block.text.type = "mrkdwn";
+              block.text.text = `${stat.name}: ${stat.count} x :vasco:`;
+              blocks.push(block);
+            });
+            let mrkdwn = {"blocks": blocks};
+            let strStats = JSON.stringify(mrkdwn);
+            res.setHeader("Content-Type", "application/json");
+            res.end(strStats);
           });
-          let mrkdwn = {"blocks": blocks};
-          let strStats = JSON.stringify(mrkdwn);
-          res.setHeader("Content-Type", "application/json");
-          res.end(strStats);
-        });
+      }
     } else {
       res.end();
     }
