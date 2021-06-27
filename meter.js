@@ -154,7 +154,7 @@ const server = http.createServer((req, res) => {
             if (result) {
               userStat = result.count;
             }
-            res.end(`You have ${userStat} vascos :vasco:`); 
+            res.end(`You have ${userStat} vasco(s) :vasco:`); 
           });
       }
     } else {
