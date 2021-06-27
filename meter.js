@@ -80,7 +80,7 @@ const server = http.createServer((req, res) => {
           .findOne({userId: user})
           .then((result) => {
             if (result) {
-              console.log(`User is already in database: ${result}`);
+              console.log(`User is already in database: ${JSON.stringify(result)}`);
               updateStats(user, result.username, json.event.type);
             } else {
               // if not found - use slack API to get user name
