@@ -173,7 +173,7 @@ function updateStats(userId, username, event) {
     }
     if (event == "reaction_removed" && result.count > 0) {
       result.count -= 1;
-    } else {
+    } else if (event == "reaction_added") {
       result.count += 1;
     }
     console.log(`Updating user stats for: ${JSON.stringify(result)}`);
