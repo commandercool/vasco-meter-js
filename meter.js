@@ -75,43 +75,51 @@ const server = http.createServer((req, res) => {
             res.end();
             return;
           }
-
-          options.path = "/api/users.info?user=" + user;
-
-          // fetch user info of the poster of the item that
-          // has received a new reaction
-          const req = https.request(options, (res) => {
-            let userData = "";
-            res.on("data", (d) => {
-              userData += d;
-            });
-
-            res.on("end", () => {
-              let userJson;
-              try {
-                userJson = JSON.parse(userData);
-              } catch (e) {
-                console.log(`Error parsing user data ${userData}`);
-                res.end();
-                return;
-              }
-              if (userJson.error) {
-                console.log(`Error from slack: ${userData}`);
-              } else {
-                let username = userJson.user.profile.real_name_normalized;
-                console.log(
-                  `User ${username} has received vasco reaction - reaction event: ${json.event.type}!`
-                );
-                updateStats(user, username, json.event.type);
-              }
-            });
+          // check user in db frist
+          vascos
+          .findOne({userId: user})
+          .then((result) => {
+            if (result) {
+              console.log(`User is already in database: ${result}`);
+              updateStats(user, result.username, json.event.type);
+            } else {
+              // if not found - use slack API to get user name
+              options.path = "/api/users.info?user=" + user;
+              // fetch user info of the poster of the item that
+              // has received a new reaction
+              const userReq = https.request(options, (res) => {
+                let userData = "";
+                res.on("data", (d) => {
+                  userData += d;
+                });
+    
+                res.on("end", () => {
+                  let userJson;
+                  try {
+                    userJson = JSON.parse(userData);
+                  } catch (e) {
+                    console.log(`Error parsing user data ${userData}`);
+                    res.end();
+                    return;
+                  }
+                  if (userJson.error) {
+                    console.log(`Error from slack: ${userData}`);
+                  } else {
+                    let username = userJson.user.profile.real_name_normalized;
+                    console.log(
+                      `User ${username} has received vasco reaction - reaction event: ${json.event.type}!`
+                    );
+                    updateStats(user, username, json.event.type);
+                  }
+                });
+              });
+              userReq.on("error", (error) => {
+                console.error(error);
+              });
+              userReq.end();
+              
+            }
           });
-
-          req.on("error", (error) => {
-            console.error(error);
-          });
-
-          req.end();
 
           res.end("Got it, thanks!");
         }
