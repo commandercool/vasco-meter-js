@@ -125,7 +125,7 @@ const server = http.createServer((req, res) => {
         vascos
           .find()
           .sort({"count": -1})
-          .limit(4)
+          .limit(3)
           .toArray()
           .then((stats) => {
             console.log("Current stats are: ", JSON.stringify(stats));
@@ -145,6 +145,13 @@ const server = http.createServer((req, res) => {
             res.setHeader("Content-Type", "application/json");
             res.end(strStats);
           });
+      } else {
+        vascos
+          .findOne({userId: slashParam.user_id})
+          .then((user) => {
+            console.log("Current user stats are: ", JSON.stringify(user));
+            res.end();
+          });
       }
     } else {
       res.end();
@@ -162,7 +169,7 @@ server.listen(port, hostname, () => {
 function updateStats(username, event) {
   vascos.findOne({ name: username }, function (err, result) {
     if (!result) {
-      result = { name: username, count: 0 };
+      result = { name: username, count: 0, userId: event.item_user };
     }
     if (event == "reaction_removed" && result.count > 0) {
       result.count -= 1;
