@@ -148,19 +148,17 @@ const server = http.createServer((req, res) => {
       } else {
         vascos
           .findOne({userId: slashParam.user_id})
-          .then((user) => {
-            console.log("Current user stats are: ", JSON.stringify(user));
-            res.end();
+          .then((result) => {
+            console.log("Current user stats are: ", JSON.stringify(result));
+            let userStat = 0
+            if (result) {
+              userStat = result.count;
+            }
+            res.end(`You have ${userStat} vascos :vasco:`); 
           });
       }
     } else {
-      vascos.findOne({ userId: userId }, function (err, result) {
-        let userStat = 0
-        if (result) {
-          userStat = result.count;
-        }
-        res.end(`You have ${userStat} vascos :vasco:`);
-      });
+      res.end();
     }
   });
 });
