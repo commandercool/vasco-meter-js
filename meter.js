@@ -102,7 +102,7 @@ const server = http.createServer((req, res) => {
                 console.log(
                   `User ${username} has received vasco reaction - reaction event: ${json.event.type}!`
                 );
-                updateStats(username, json.event.type);
+                updateStats(user, username, json.event.type);
               }
             });
           });
@@ -166,10 +166,10 @@ server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-function updateStats(username, event) {
-  vascos.findOne({ name: username }, function (err, result) {
+function updateStats(userId, username, event) {
+  vascos.findOne({ userId: userId }, function (err, result) {
     if (!result) {
-      result = { name: username, count: 0, userId: event.item_user };
+      result = { name: username, count: 0, userId: userId };
     }
     if (event == "reaction_removed" && result.count > 0) {
       result.count -= 1;
