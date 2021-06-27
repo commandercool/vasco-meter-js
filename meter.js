@@ -154,7 +154,13 @@ const server = http.createServer((req, res) => {
           });
       }
     } else {
-      res.end();
+      vascos.findOne({ userId: userId }, function (err, result) {
+        let userStat = 0
+        if (result) {
+          userStat = result.count;
+        }
+        res.end(`You have ${userStat} vascos :vasco:`);
+      });
     }
   });
 });
