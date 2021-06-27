@@ -189,6 +189,6 @@ function updateStats(userId, username, event) {
       result.count += 1;
     }
     console.log(`Updating user stats for: ${JSON.stringify(result)}`);
-    vascos.updateOne({ name: username }, { $set: result }, { upsert: true });
+    vascos.updateOne({ userId: userId }, { $set: result }, { upsert: true });
   });
 }
