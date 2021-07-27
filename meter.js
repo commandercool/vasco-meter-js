@@ -138,7 +138,31 @@ const server = http.createServer((req, res) => {
           .then((stats) => {
             console.log("Current stats are: ", JSON.stringify(stats));
             var blocks = [];
-            let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text": ":trophy: *Current stats are:*"}};
+            let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text": ":trophy: *Current top 3* :trophy:"}};
+            blocks.push(titleBlock);
+            stats.forEach(stat => {
+              let block = {};
+              block.type = "section";
+              block.text = {};
+              block.text.type = "mrkdwn";
+              block.text.text = `${stat.name}: ${stat.count} x :vasco:`;
+              blocks.push(block);
+            });
+            let mrkdwn = {"blocks": blocks};
+            let strStats = JSON.stringify(mrkdwn);
+            res.setHeader("Content-Type", "application/json");
+            res.end(strStats);
+          });
+      } else if (slashParam.text == "all") {
+        // TODO: refactor it and move duplicated code to a one place
+        vascos
+          .find()
+          .sort({"count": -1})
+          .toArray()
+          .then((stats) => {
+            console.log("Current stats are: ", JSON.stringify(stats));
+            var blocks = [];
+            let titleBlock = {"type": "section", "text": {"type": "mrkdwn", "text": ":raised_hands: *Current team stats are:*"}};
             blocks.push(titleBlock);
             stats.forEach(stat => {
               let block = {};
